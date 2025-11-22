@@ -1,7 +1,7 @@
+@model DashboardViewModel
+
 @{
     ViewData["Title"] = "Dashboard Admin";
-    var salesData = ViewBag.SalesData as List<dynamic>;
-    var revenueData = ViewBag.RevenueData as List<dynamic>;
 }
 
 <div class="row mb-5">
@@ -29,7 +29,7 @@
                     </div>
                     <i class="bi bi-cash-stack" style="font-size: 2rem; opacity: 0.7;"></i>
                 </div>
-                <h3 class="mb-1">Rp @ViewBag.MonthlyRevenue.ToString("N0")</h3>
+                <h3 class="mb-1">Rp @Model.MonthlyRevenue.ToString("N0")</h3>
                 <small style="opacity: 0.8;">
                     <i class="bi bi-calendar-month"></i> @DateTime.Now.ToString("MMMM yyyy")
                 </small>
@@ -46,7 +46,7 @@
                     </div>
                     <i class="bi bi-graph-up-arrow" style="font-size: 2rem; opacity: 0.7;"></i>
                 </div>
-                <h3 class="mb-1">@ViewBag.MonthlyBooksSold</h3>
+                <h3 class="mb-1">@Model.MonthlyBooksSold</h3>
                 <small style="opacity: 0.8;">
                     <i class="bi bi-box-seam"></i> Total unit bulan ini
                 </small>
@@ -63,7 +63,7 @@
                     </div>
                     <i class="bi bi-receipt" style="font-size: 2rem; opacity: 0.7;"></i>
                 </div>
-                <h3 class="mb-1">@ViewBag.MonthlyTransactions</h3>
+                <h3 class="mb-1">@Model.MonthlyTransactions</h3>
                 <small style="opacity: 0.8;">
                     <i class="bi bi-cart-check"></i> Total pesanan bulan ini
                 </small>
@@ -80,7 +80,7 @@
                     </div>
                     <i class="bi bi-collection" style="font-size: 2rem; opacity: 0.7;"></i>
                 </div>
-                <h3 class="mb-1">@ViewBag.TotalBooks</h3>
+                <h3 class="mb-1">@Model.TotalBooks</h3>
                 <small style="opacity: 0.8;">
                     <i class="bi bi-bookshelf"></i> Jumlah buku di katalog
                 </small>
@@ -153,8 +153,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Data dari server
-        var salesData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.SalesData));
-        var revenueData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.RevenueData));
+        var salesData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.SalesData));
+        var revenueData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.RevenueData));
 
         // Chart Penjualan
         var salesCtx = document.getElementById('salesChart').getContext('2d');

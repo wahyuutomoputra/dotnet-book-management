@@ -6,12 +6,6 @@ using BookManagement.Models;
 
 namespace BookManagement.Controllers;
 
-public class MonthlyData
-{
-    public string Month { get; set; } = string.Empty;
-    public int Value { get; set; }
-}
-
 [Authorize(Roles = "admin")]
 public class AdminController : Controller
 {
@@ -83,14 +77,17 @@ public class AdminController : Controller
             });
         }
 
-        ViewBag.MonthlyRevenue = monthlyRevenue;
-        ViewBag.MonthlyBooksSold = monthlyBooksSold;
-        ViewBag.MonthlyTransactions = monthlyTransactions;
-        ViewBag.TotalBooks = totalBooks;
-        ViewBag.SalesData = salesData;
-        ViewBag.RevenueData = revenueData;
+        var viewModel = new DashboardViewModel
+        {
+            MonthlyRevenue = monthlyRevenue,
+            MonthlyBooksSold = monthlyBooksSold,
+            MonthlyTransactions = monthlyTransactions,
+            TotalBooks = totalBooks,
+            SalesData = salesData,
+            RevenueData = revenueData
+        };
 
-        return View();
+        return View(viewModel);
     }
 
     // GET: Admin/Books
