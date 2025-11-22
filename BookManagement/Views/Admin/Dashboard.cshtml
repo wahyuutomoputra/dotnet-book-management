@@ -1,0 +1,190 @@
+@{
+    ViewData["Title"] = "Dashboard Admin";
+    var salesData = ViewBag.SalesData as List<dynamic>;
+    var revenueData = ViewBag.RevenueData as List<dynamic>;
+}
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2>Dashboard Admin</h2>
+        <p class="text-muted">Ringkasan statistik dan performa penjualan</p>
+    </div>
+</div>
+
+<!-- Cards Statistik -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h6 class="card-title">Pendapatan Bulan Ini</h6>
+                <h3 class="mb-0">Rp @ViewBag.MonthlyRevenue.ToString("N0")</h3>
+                <small>@DateTime.Now.ToString("MMMM yyyy")</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h6 class="card-title">Buku Terjual Bulan Ini</h6>
+                <h3 class="mb-0">@ViewBag.MonthlyBooksSold</h3>
+                <small>Total unit terjual</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h6 class="card-title">Transaksi Bulan Ini</h6>
+                <h3 class="mb-0">@ViewBag.MonthlyTransactions</h3>
+                <small>Total pesanan</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h6 class="card-title">Total Buku di Katalog</h6>
+                <h3 class="mb-0">@ViewBag.TotalBooks</h3>
+                <small>Jumlah buku</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Penjualan Buku per Bulan (12 Bulan Terakhir)</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Pendapatan per Bulan (12 Bulan Terakhir)</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <a asp-action="CreateBook" class="btn btn-success me-2">
+                    <i class="bi bi-plus-circle"></i> Tambah Buku Baru
+                </a>
+                <a asp-action="Books" class="btn btn-primary me-2">
+                    <i class="bi bi-book"></i> Kelola Buku
+                </a>
+                <a asp-action="Transactions" class="btn btn-info">
+                    <i class="bi bi-cart"></i> Lihat Transaksi
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Data dari server
+        var salesData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.SalesData));
+        var revenueData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.RevenueData));
+
+        // Chart Penjualan
+        var salesCtx = document.getElementById('salesChart').getContext('2d');
+        var salesChart = new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: salesData.map(d => d.month),
+                datasets: [{
+                    label: 'Jumlah Buku Terjual',
+                    data: salesData.map(d => d.value),
+                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                    borderColor: 'rgba(40, 167, 69, 1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                }
+            }
+        });
+
+        // Chart Pendapatan
+        var revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        var revenueChart = new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: revenueData.map(d => d.month),
+                datasets: [{
+                    label: 'Pendapatan (Rp)',
+                    data: revenueData.map(d => d.value),
+                    backgroundColor: 'rgba(0, 123, 255, 0.6)',
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return 'Rp ' + value.toLocaleString('id-ID');
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Pendapatan: Rp ' + context.parsed.y.toLocaleString('id-ID');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

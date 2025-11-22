@@ -1,0 +1,109 @@
+@model IEnumerable<BookManagement.Models.Order>
+
+@{
+    ViewData["Title"] = "Transaksi Checkout";
+}
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <h2>Transaksi Checkout</h2>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <form method="get" class="d-flex">
+            <input type="text" name="search" class="form-control me-2" placeholder="Cari nomor pesanan atau email..." value="@ViewBag.SearchTerm" />
+            <button type="submit" class="btn btn-primary">Cari</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <div class="btn-group float-end" role="group">
+            <a asp-action="Transactions" class="btn btn-outline-secondary @(ViewBag.CurrentStatus == null ? "active" : "")">Semua</a>
+            @foreach (var status in ViewBag.Statuses)
+            {
+                <a asp-action="Transactions" asp-route-status="@status" class="btn btn-outline-secondary @(ViewBag.CurrentStatus == status ? "active" : "")">@status</a>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Nomor Pesanan</th>
+                <th>Customer</th>
+                <th>Tanggal</th>
+                <th>Total Item</th>
+                <th>Total Pembayaran</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td><strong>@order.OrderNumber</strong></td>
+                    <td>@order.User.Email</td>
+                    <td>@order.OrderDate.ToString("dd MMM yyyy HH:mm")</td>
+                    <td>@order.OrderItems.Sum(oi => oi.Quantity)</td>
+                    <td>Rp @order.TotalAmount.ToString("N0")</td>
+                    <td>
+                        @if (order.Status == "Pending")
+                        {
+                            <span class="badge bg-warning">@order.Status</span>
+                        }
+                        else if (order.Status == "Paid")
+                        {
+                            <span class="badge bg-success">@order.Status</span>
+                        }
+                        else if (order.Status == "Completed")
+                        {
+                            <span class="badge bg-info">@order.Status</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">@order.Status</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="TransactionDetails" asp-route-id="@order.Id" class="btn btn-sm btn-primary">Detail</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Tidak ada transaksi ditemukan.
+    </div>
+}
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h5>Ringkasan</h5>
+        <div class="row text-center">
+            <div class="col-md-3">
+                <h3>@Model.Count()</h3>
+                <p class="text-muted">Total Transaksi</p>
+            </div>
+            <div class="col-md-3">
+                <h3>@Model.Count(o => o.Status == "Pending")</h3>
+                <p class="text-muted">Pending</p>
+            </div>
+            <div class="col-md-3">
+                <h3>@Model.Count(o => o.Status == "Paid")</h3>
+                <p class="text-muted">Paid</p>
+            </div>
+            <div class="col-md-3">
+                <h3>Rp @Model.Sum(o => o.TotalAmount).ToString("N0")</h3>
+                <p class="text-muted">Total Pendapatan</p>
+            </div>
+        </div>
+    </div>
+</div>

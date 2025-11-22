@@ -1,0 +1,61 @@
+@model BookManagement.Models.Order
+
+@{
+    ViewData["Title"] = "Pembayaran Berhasil";
+}
+
+<div class="text-center mt-5">
+    <div class="mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+        </svg>
+    </div>
+    
+    <h1 class="display-4 text-success">Pembayaran Berhasil!</h1>
+    <p class="lead">Terima kasih telah berbelanja di BookManagement</p>
+    
+    <div class="card mx-auto mt-4" style="max-width: 600px;">
+        <div class="card-body">
+            <h5 class="card-title">Detail Pesanan</h5>
+            <hr />
+            <div class="text-start">
+                <div class="row mb-2">
+                    <div class="col-6">Nomor Pesanan:</div>
+                    <div class="col-6"><strong>@Model.OrderNumber</strong></div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6">Tanggal:</div>
+                    <div class="col-6">@Model.OrderDate.ToString("dd MMM yyyy HH:mm")</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6">Total Item:</div>
+                    <div class="col-6">@Model.OrderItems.Sum(oi => oi.Quantity)</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6">Total Pembayaran:</div>
+                    <div class="col-6"><strong class="text-success">Rp @Model.TotalAmount.ToString("N0")</strong></div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6">Status:</div>
+                    <div class="col-6"><span class="badge bg-warning">@Model.Status</span></div>
+                </div>
+            </div>
+            <hr />
+            <h6>Item yang Dibeli:</h6>
+            <ul class="list-group list-group-flush">
+                @foreach (var item in Model.OrderItems)
+                {
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>@item.Book.Title (@item.Quantity x)</span>
+                        <span>Rp @item.Subtotal.ToString("N0")</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    
+    <div class="mt-4">
+        <a asp-controller="Book" asp-action="Index" class="btn btn-primary btn-lg me-2">Belanja Lagi</a>
+        <a asp-action="MyOrders" class="btn btn-outline-secondary btn-lg">Lihat Pesanan Saya</a>
+    </div>
+</div>

@@ -1,0 +1,128 @@
+@model BookManagement.Models.Book
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-action="Books">Kelola Buku</a></li>
+                <li class="breadcrumb-item active">@Model.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h2>@Model.Title</h2>
+        <h5 class="text-muted">@Model.Author</h5>
+        
+        <div class="mt-4">
+            <table class="table table-borderless">
+                <tr>
+                    <th width="150">Penerbit</th>
+                    <td>@Model.Publisher</td>
+                </tr>
+                <tr>
+                    <th>Tahun Terbit</th>
+                    <td>@Model.PublicationYear</td>
+                </tr>
+                <tr>
+                    <th>ISBN</th>
+                    <td>@Model.ISBN</td>
+                </tr>
+                <tr>
+                    <th>Kategori</th>
+                    <td><span class="badge bg-info">@Model.Category</span></td>
+                </tr>
+                <tr>
+                    <th>Harga</th>
+                    <td><strong class="text-primary">Rp @Model.Price.ToString("N0")</strong></td>
+                </tr>
+                <tr>
+                    <th>Stock</th>
+                    <td>
+                        @if (Model.Stock > 0)
+                        {
+                            <span class="badge bg-success">@Model.Stock</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Habis</span>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Dibuat</th>
+                    <td>@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
+                </tr>
+                <tr>
+                    <th>Diupdate</th>
+                    <td>@Model.UpdatedAt.ToString("dd MMM yyyy HH:mm")</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="mt-4">
+            <h5>Deskripsi</h5>
+            <p>@Model.Description</p>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Update Stock</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="UpdateStock" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="mb-3">
+                        <label for="stock" class="form-label">Stock Baru</label>
+                        <input type="number" class="form-control" id="stock" name="stock" value="@Model.Stock" min="0" required />
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Update Stock</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-action="EditBook" asp-route-id="@Model.Id" class="btn btn-warning">Edit Buku</a>
+                    <form asp-action="DeleteBook" method="post" onsubmit="return confirm('Hapus buku ini dari katalog?');">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button type="submit" class="btn btn-danger w-100">Hapus Buku</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <a asp-action="Books" class="btn btn-secondary">Kembali ke Daftar Buku</a>
+    </div>
+</div>

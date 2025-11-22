@@ -1,0 +1,73 @@
+@model BookManagement.Models.Book
+
+@{
+    ViewData["Title"] = "Tambah Buku Baru";
+}
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h2>Tambah Buku Baru</h2>
+        
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <form asp-action="CreateBook" method="post">
+            <div class="mb-3">
+                <label for="Title" class="form-label">Judul <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="Title" name="Title" required />
+            </div>
+            
+            <div class="mb-3">
+                <label for="Author" class="form-label">Author <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="Author" name="Author" required />
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="Publisher" class="form-label">Penerbit</label>
+                    <input type="text" class="form-control" id="Publisher" name="Publisher" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="PublicationYear" class="form-label">Tahun Terbit</label>
+                    <input type="number" class="form-control" id="PublicationYear" name="PublicationYear" />
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="ISBN" class="form-label">ISBN</label>
+                <input type="text" class="form-control" id="ISBN" name="ISBN" />
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="Price" class="form-label">Harga <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="Price" name="Price" step="0.01" required />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="Stock" class="form-label">Stock <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="Stock" name="Stock" value="0" required />
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="Category" class="form-label">Kategori</label>
+                <input type="text" class="form-control" id="Category" name="Category" />
+            </div>
+            
+            <div class="mb-3">
+                <label for="Description" class="form-label">Deskripsi</label>
+                <textarea class="form-control" id="Description" name="Description" rows="4"></textarea>
+            </div>
+            
+            <div class="mb-3">
+                <button type="submit" class="btn btn-success">Simpan</button>
+                <a asp-action="Books" class="btn btn-secondary">Batal</a>
+            </div>
+        </form>
+    </div>
+</div>

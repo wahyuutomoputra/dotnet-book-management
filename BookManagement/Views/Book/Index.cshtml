@@ -1,0 +1,84 @@
+@model IEnumerable<BookManagement.Models.Book>
+
+@{
+    ViewData["Title"] = "Daftar Buku";
+}
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <h2>Daftar Buku</h2>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <form method="get" class="d-flex">
+            <input type="text" name="search" class="form-control me-2" placeholder="Cari buku..." value="@ViewBag.SearchTerm" />
+            <button type="submit" class="btn btn-primary">Cari</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <div class="btn-group float-end" role="group">
+            <a asp-action="Index" class="btn btn-outline-secondary @(ViewBag.CurrentCategory == null ? "active" : "")">Semua</a>
+            @foreach (var category in ViewBag.Categories)
+            {
+                <a asp-action="Index" asp-route-category="@category" class="btn btn-outline-secondary @(ViewBag.CurrentCategory == category ? "active" : "")">@category</a>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var book in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">@book.Title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@book.Author</h6>
+                    <p class="card-text">
+                        <small>@book.Publisher (@book.PublicationYear)</small><br />
+                        <span class="badge bg-info">@book.Category</span>
+                    </p>
+                    <p class="card-text">
+                        <strong>Rp @book.Price.ToString("N0")</strong>
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted">Stock: @book.Stock</small>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Details" asp-route-id="@book.Id" class="btn btn-sm btn-primary">Detail</a>
+                    <form asp-action="AddToCart" method="post" class="d-inline">
+                        <input type="hidden" name="bookId" value="@book.Id" />
+                        <input type="hidden" name="quantity" value="1" />
+                        <button type="submit" class="btn btn-sm btn-success">Tambah ke Keranjang</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Tidak ada buku yang tersedia.
+    </div>
+}

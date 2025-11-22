@@ -1,0 +1,168 @@
+@model BookManagement.Models.Order
+
+@{
+    ViewData["Title"] = "Detail Transaksi";
+}
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-action="Transactions">Transaksi</a></li>
+                <li class="breadcrumb-item active">@Model.OrderNumber</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Detail Pesanan: @Model.OrderNumber</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Customer:</strong><br />
+                        @Model.User.Email
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Tanggal Pesanan:</strong><br />
+                        @Model.OrderDate.ToString("dd MMMM yyyy HH:mm")
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Status:</strong><br />
+                        @if (Model.Status == "Pending")
+                        {
+                            <span class="badge bg-warning">@Model.Status</span>
+                        }
+                        else if (Model.Status == "Paid")
+                        {
+                            <span class="badge bg-success">@Model.Status</span>
+                        }
+                        else if (Model.Status == "Completed")
+                        {
+                            <span class="badge bg-info">@Model.Status</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">@Model.Status</span>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        @if (Model.PaidAt != null)
+                        {
+                            <strong>Dibayar pada:</strong><br />
+                            @Model.PaidAt.Value.ToString("dd MMMM yyyy HH:mm")
+                        }
+                    </div>
+                </div>
+                
+                <hr />
+                
+                <h6>Item Pesanan</h6>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Buku</th>
+                            <th>Harga</th>
+                            <th>Jumlah</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderItems)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@item.Book.Title</strong><br />
+                                    <small class="text-muted">@item.Book.Author</small>
+                                </td>
+                                <td>Rp @item.Price.ToString("N0")</td>
+                                <td>@item.Quantity</td>
+                                <td>Rp @item.Subtotal.ToString("N0")</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3" class="text-end">Total:</th>
+                            <th>Rp @Model.TotalAmount.ToString("N0")</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Update Status</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="UpdateOrderStatus" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status Baru</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="Pending" selected="@(Model.Status == "Pending")">Pending</option>
+                            <option value="Paid" selected="@(Model.Status == "Paid")">Paid</option>
+                            <option value="Completed" selected="@(Model.Status == "Completed")">Completed</option>
+                            <option value="Cancelled" selected="@(Model.Status == "Cancelled")">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Update Status</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>Ringkasan</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-2">
+                    <strong>Nomor Pesanan:</strong><br />
+                    @Model.OrderNumber
+                </div>
+                <div class="mb-2">
+                    <strong>Total Item:</strong><br />
+                    @Model.OrderItems.Sum(oi => oi.Quantity) item
+                </div>
+                <div class="mb-2">
+                    <strong>Total Pembayaran:</strong><br />
+                    <span class="text-success fs-4">Rp @Model.TotalAmount.ToString("N0")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <a asp-action="Transactions" class="btn btn-secondary">Kembali ke Transaksi</a>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+@model IEnumerable<BookManagement.Models.Order>
+
+@{
+    ViewData["Title"] = "Pesanan Saya";
+}
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <h2>Pesanan Saya</h2>
+    </div>
+</div>
+
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nomor Pesanan</th>
+                    <th>Tanggal</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td><strong>@order.OrderNumber</strong></td>
+                        <td>@order.OrderDate.ToString("dd MMM yyyy HH:mm")</td>
+                        <td>Rp @order.TotalAmount.ToString("N0")</td>
+                        <td>
+                            @if (order.Status == "Pending")
+                            {
+                                <span class="badge bg-warning">@order.Status</span>
+                            }
+                            else if (order.Status == "Paid")
+                            {
+                                <span class="badge bg-success">@order.Status</span>
+                            }
+                            else if (order.Status == "Completed")
+                            {
+                                <span class="badge bg-info">@order.Status</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">@order.Status</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-primary">Detail</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        <h4>Belum ada pesanan</h4>
+        <p>Anda belum pernah melakukan pemesanan.</p>
+        <a asp-controller="Book" asp-action="Index" class="btn btn-primary">Mulai Belanja</a>
+    </div>
+}
