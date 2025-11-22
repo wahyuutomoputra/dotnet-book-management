@@ -4,76 +4,119 @@
     var revenueData = ViewBag.RevenueData as List<dynamic>;
 }
 
-<div class="row mb-4">
+<div class="row mb-5">
     <div class="col-md-12">
-        <h2>Dashboard Admin</h2>
-        <p class="text-muted">Ringkasan statistik dan performa penjualan</p>
+        <div class="d-flex align-items-center">
+            <div class="me-3" style="width: 70px; height: 70px; background: linear-gradient(135deg, var(--primary-color), var(--info-color)); border-radius: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);">
+                <i class="bi bi-speedometer2" style="font-size: 2rem; color: white;"></i>
+            </div>
+            <div>
+                <h2 class="mb-1 fw-bold">Dashboard Admin</h2>
+                <p class="text-muted mb-0">Ringkasan statistik dan performa penjualan</p>
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- Cards Statistik -->
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card text-white bg-primary">
+<div class="row mb-5">
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card shadow-lg" style="background-color: #2563eb;">
             <div class="card-body">
-                <h6 class="card-title">Pendapatan Bulan Ini</h6>
-                <h3 class="mb-0">Rp @ViewBag.MonthlyRevenue.ToString("N0")</h3>
-                <small>@DateTime.Now.ToString("MMMM yyyy")</small>
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <h6 class="mb-0" style="opacity: 0.9;">Pendapatan Bulan Ini</h6>
+                    </div>
+                    <i class="bi bi-cash-stack" style="font-size: 2rem; opacity: 0.7;"></i>
+                </div>
+                <h3 class="mb-1">Rp @ViewBag.MonthlyRevenue.ToString("N0")</h3>
+                <small style="opacity: 0.8;">
+                    <i class="bi bi-calendar-month"></i> @DateTime.Now.ToString("MMMM yyyy")
+                </small>
             </div>
         </div>
     </div>
     
-    <div class="col-md-3">
-        <div class="card text-white bg-success">
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card shadow-lg" style="background-color: #10b981;">
             <div class="card-body">
-                <h6 class="card-title">Buku Terjual Bulan Ini</h6>
-                <h3 class="mb-0">@ViewBag.MonthlyBooksSold</h3>
-                <small>Total unit terjual</small>
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <h6 class="mb-0" style="opacity: 0.9;">Buku Terjual</h6>
+                    </div>
+                    <i class="bi bi-graph-up-arrow" style="font-size: 2rem; opacity: 0.7;"></i>
+                </div>
+                <h3 class="mb-1">@ViewBag.MonthlyBooksSold</h3>
+                <small style="opacity: 0.8;">
+                    <i class="bi bi-box-seam"></i> Total unit bulan ini
+                </small>
             </div>
         </div>
     </div>
     
-    <div class="col-md-3">
-        <div class="card text-white bg-info">
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card shadow-lg" style="background-color: #06b6d4;">
             <div class="card-body">
-                <h6 class="card-title">Transaksi Bulan Ini</h6>
-                <h3 class="mb-0">@ViewBag.MonthlyTransactions</h3>
-                <small>Total pesanan</small>
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <h6 class="mb-0" style="opacity: 0.9;">Transaksi</h6>
+                    </div>
+                    <i class="bi bi-receipt" style="font-size: 2rem; opacity: 0.7;"></i>
+                </div>
+                <h3 class="mb-1">@ViewBag.MonthlyTransactions</h3>
+                <small style="opacity: 0.8;">
+                    <i class="bi bi-cart-check"></i> Total pesanan bulan ini
+                </small>
             </div>
         </div>
     </div>
     
-    <div class="col-md-3">
-        <div class="card text-white bg-warning">
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card shadow-lg" style="background-color: #f59e0b;">
             <div class="card-body">
-                <h6 class="card-title">Total Buku di Katalog</h6>
-                <h3 class="mb-0">@ViewBag.TotalBooks</h3>
-                <small>Jumlah buku</small>
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <h6 class="mb-0" style="opacity: 0.9;">Total Buku</h6>
+                    </div>
+                    <i class="bi bi-collection" style="font-size: 2rem; opacity: 0.7;"></i>
+                </div>
+                <h3 class="mb-1">@ViewBag.TotalBooks</h3>
+                <small style="opacity: 0.8;">
+                    <i class="bi bi-bookshelf"></i> Jumlah buku di katalog
+                </small>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Charts -->
-<div class="row">
+<div class="row mb-5">
     <div class="col-md-6 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h5>Penjualan Buku per Bulan (12 Bulan Terakhir)</h5>
+        <div class="card shadow-md border-0">
+            <div class="card-header bg-white border-bottom">
+                <h5 class="mb-1 fw-bold">
+                    <i class="bi bi-graph-up-arrow text-success me-2"></i> 
+                    Penjualan Buku per Bulan
+                </h5>
+                <small class="text-muted">12 Bulan Terakhir</small>
             </div>
-            <div class="card-body">
-                <canvas id="salesChart"></canvas>
+            <div class="card-body p-4">
+                <canvas id="salesChart" height="300"></canvas>
             </div>
         </div>
     </div>
     
     <div class="col-md-6 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h5>Pendapatan per Bulan (12 Bulan Terakhir)</h5>
+        <div class="card shadow-md border-0">
+            <div class="card-header bg-white border-bottom">
+                <h5 class="mb-1 fw-bold">
+                    <i class="bi bi-currency-dollar text-primary me-2"></i> 
+                    Pendapatan per Bulan
+                </h5>
+                <small class="text-muted">12 Bulan Terakhir</small>
             </div>
-            <div class="card-body">
-                <canvas id="revenueChart"></canvas>
+            <div class="card-body p-4">
+                <canvas id="revenueChart" height="300"></canvas>
             </div>
         </div>
     </div>
@@ -82,20 +125,25 @@
 <!-- Quick Actions -->
 <div class="row">
     <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h5>Quick Actions</h5>
+        <div class="card shadow-md border-0">
+            <div class="card-header bg-white border-bottom">
+                <h5 class="mb-0 fw-bold">
+                    <i class="bi bi-lightning-charge-fill text-warning me-2"></i> 
+                    Quick Actions
+                </h5>
             </div>
-            <div class="card-body">
-                <a asp-action="CreateBook" class="btn btn-success me-2">
-                    <i class="bi bi-plus-circle"></i> Tambah Buku Baru
-                </a>
-                <a asp-action="Books" class="btn btn-primary me-2">
-                    <i class="bi bi-book"></i> Kelola Buku
-                </a>
-                <a asp-action="Transactions" class="btn btn-info">
-                    <i class="bi bi-cart"></i> Lihat Transaksi
-                </a>
+            <div class="card-body p-4">
+                <div class="d-grid gap-2 d-md-flex">
+                    <a asp-action="CreateBook" class="btn btn-success">
+                        <i class="bi bi-plus-circle me-2"></i> Tambah Buku Baru
+                    </a>
+                    <a asp-action="Books" class="btn btn-primary">
+                        <i class="bi bi-collection me-2"></i> Kelola Buku
+                    </a>
+                    <a asp-action="Transactions" class="btn btn-info">
+                        <i class="bi bi-cash-stack me-2"></i> Lihat Transaksi
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -117,28 +165,68 @@
                 datasets: [{
                     label: 'Jumlah Buku Terjual',
                     data: salesData.map(d => d.value),
-                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                    borderColor: 'rgba(40, 167, 69, 1)',
-                    borderWidth: 2,
+                    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                    borderColor: '#10b981',
+                    borderWidth: 3,
                     fill: true,
-                    tension: 0.4
+                    tension: 0.4,
+                    pointBackgroundColor: '#10b981',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            stepSize: 1
+                            stepSize: 1,
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            display: false
                         }
                     }
                 },
                 plugins: {
                     legend: {
                         display: true,
-                        position: 'top'
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 13,
+                                weight: 'bold'
+                            },
+                            usePointStyle: true,
+                            padding: 15
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        padding: 12,
+                        cornerRadius: 8
                     }
                 }
             }
@@ -153,30 +241,65 @@
                 datasets: [{
                     label: 'Pendapatan (Rp)',
                     data: revenueData.map(d => d.value),
-                    backgroundColor: 'rgba(0, 123, 255, 0.6)',
-                    borderColor: 'rgba(0, 123, 255, 1)',
-                    borderWidth: 1
+                    backgroundColor: '#2563eb',
+                    borderColor: '#1e40af',
+                    borderWidth: 0,
+                    borderRadius: 8,
+                    borderSkipped: false
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         beginAtZero: true,
                         ticks: {
                             callback: function(value) {
                                 return 'Rp ' + value.toLocaleString('id-ID');
+                            },
+                            font: {
+                                size: 12
                             }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            display: false
                         }
                     }
                 },
                 plugins: {
                     legend: {
                         display: true,
-                        position: 'top'
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 13,
+                                weight: 'bold'
+                            },
+                            usePointStyle: true,
+                            padding: 15
+                        }
                     },
                     tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        padding: 12,
+                        cornerRadius: 8,
                         callbacks: {
                             label: function(context) {
                                 return 'Pendapatan: Rp ' + context.parsed.y.toLocaleString('id-ID');
